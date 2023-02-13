@@ -38,7 +38,10 @@ final class PayloadSerializer implements PayloadSerializerInterface
      */
     public function serialize(Event $event): string
     {
-        if (EventType::transaction() === $event->getType()) {
+        if (
+            EventType::transaction() === $event->getType() ||
+            EventType::checkIn() === $event->getType()
+        ) {
             return $this->serializeAsEnvelope($event);
         }
 
@@ -121,6 +124,17 @@ final class PayloadSerializer implements PayloadSerializerInterface
                 'ip_address' => $user->getIpAddress(),
                 'segment' => $user->getSegment(),
             ]);
+        }
+
+        $checkIn = $event->getCheckIn();
+
+        if (null !== $checkIn) {
+            $result['check-in'] = [
+                'id' => $checkIn->getId(),
+                'status' => $checkIn->getStatus(),
+                'duration' => $checkIn->getDuration(),
+                'date_created' => $checkIn->getDate(),
+            ];
         }
 
         $osContext = $event->getOsContext();
