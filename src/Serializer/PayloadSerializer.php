@@ -129,11 +129,11 @@ final class PayloadSerializer implements PayloadSerializerInterface
         $checkIn = $event->getCheckIn();
 
         if (null !== $checkIn) {
-            $result['check-in'] = [
-                'id' => $checkIn->getId(),
+            $result['check_in'] = [
+                'checkin_id' => $checkIn->getId(),
+                'monitor_id' => $checkIn->getMonitorId(),
                 'status' => $checkIn->getStatus(),
                 'duration' => $checkIn->getDuration(),
-                'date_created' => $checkIn->getDate(),
             ];
         }
 

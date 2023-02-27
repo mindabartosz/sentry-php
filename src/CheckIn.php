@@ -12,20 +12,17 @@ final class CheckIn
     private $monitorId;
     private $status;
     private $duration;
-    private $date;
 
     public function __construct(
         string $id = null,
         string $monitorId = null,
         string $status = null,
-        ?int $duration = null,
-        ?string $date = null
+        ?int $duration = null
     ) {
         $this->setId($id ?? SentryUid::generate());
         $this->setMonitorId($monitorId);
         $this->setStatus($status);
         $this->setDuration($duration);
-        $this->setDate($date);
     }
 
     public function getId()
@@ -66,15 +63,5 @@ final class CheckIn
     public function setDuration(?int $duration): void
     {
         $this->duration = $duration;
-    }
-
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    public function setDate(?string $date): void
-    {
-        $this->date = $date;
     }
 }
