@@ -42,6 +42,9 @@ final class PayloadSerializer implements PayloadSerializerInterface
             EventType::transaction() === $event->getType() ||
             EventType::checkIn() === $event->getType()
         ) {
+            debug($this->serializeAsEnvelope($event));
+            exit;
+
             return $this->serializeAsEnvelope($event);
         }
 
@@ -60,6 +63,14 @@ final class PayloadSerializer implements PayloadSerializerInterface
      */
     public function toArray(Event $event): array
     {
+        $checkIn = $event->getCheckIn();
+        return [
+            'checkin_id' => $checkIn->getId(),
+            'monitor_id' => $checkIn->getMonitorId(),
+            'status' => $checkIn->getStatus(),
+            'duration' => $checkIn->getDuration(),
+        ];
+
         $result = [
             'event_id' => (string) $event->getId(),
             'timestamp' => $event->getTimestamp(),
@@ -124,17 +135,6 @@ final class PayloadSerializer implements PayloadSerializerInterface
                 'ip_address' => $user->getIpAddress(),
                 'segment' => $user->getSegment(),
             ]);
-        }
-
-        $checkIn = $event->getCheckIn();
-
-        if (null !== $checkIn) {
-            $result['check_in'] = [
-                'checkin_id' => $checkIn->getId(),
-                'monitor_id' => $checkIn->getMonitorId(),
-                'status' => $checkIn->getStatus(),
-                'duration' => $checkIn->getDuration(),
-            ];
         }
 
         $osContext = $event->getOsContext();
