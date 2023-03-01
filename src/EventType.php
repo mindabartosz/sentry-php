@@ -50,7 +50,7 @@ final class EventType implements \Stringable
 
     public static function checkIn(): self
     {
-        return self::getInstance('check-in');
+        return self::getInstance('check_in');
     }
 
     public function __toString(): string
