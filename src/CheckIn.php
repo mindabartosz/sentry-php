@@ -9,23 +9,50 @@ use Sentry\Util\SentryUid;
 final class CheckIn
 {
     private $id;
-    private $monitorId;
+
+    /**
+     * @var string The monitor slug
+     */
+    private $monitorSlug;
+
+    /**
+     * @var string The status of the check-in
+     */
     private $status;
+
+    /**
+     * @var string|null The release
+     */
+    private $release;
+
+    /**
+     * @var string|null The environment
+     */
+    private $environment;
+
+    /**
+     * @var int|null The duration of the check in seconds
+     */
     private $duration;
 
     public function __construct(
+        string $monitorSlug,
+        string $status,
         string $id = null,
-        string $monitorId = null,
-        string $status = null,
+        ?string $release = null,
+        ?string $environment = null,
         ?int $duration = null
     ) {
-        $this->setId($id ?? SentryUid::generate());
-        $this->setMonitorId($monitorId);
+        $this->setMonitorSlug($monitorSlug);
         $this->setStatus($status);
+
+        $this->setId($id ?? SentryUid::generate());
+        $this->setRelease($release ?? '');
+        $this->setEnvironment($environment ?? Event::DEFAULT_ENVIRONMENT);
         $this->setDuration($duration);
     }
 
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -35,17 +62,17 @@ final class CheckIn
         $this->id = $id;
     }
 
-    public function getMonitorId()
+    public function getMonitorSlug(): string
     {
-        return $this->monitorId;
+        return $this->monitorSlug;
     }
 
-    public function setMonitorId(string $monitorId): void
+    public function setMonitorSlug(string $monitorSlug): void
     {
-        $this->monitorId = $monitorId;
+        $this->monitorSlug = $monitorSlug;
     }
 
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -55,7 +82,27 @@ final class CheckIn
         $this->status = $status;
     }
 
-    public function getDuration()
+    public function getRelease(): ?string
+    {
+        return $this->release;
+    }
+
+    public function setRelease(string $release): void
+    {
+        $this->release = $release;
+    }
+
+    public function getEnvironment(): ?string
+    {
+        return $this->environment;
+    }
+
+    public function setEnvironment(string $environment): void
+    {
+        $this->environment = $environment;
+    }
+
+    public function getDuration(): ?int
     {
         return $this->duration;
     }
